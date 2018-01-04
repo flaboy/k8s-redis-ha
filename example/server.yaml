@@ -10,12 +10,6 @@ spec:
     metadata:
       labels:
         app: redis-server
-      annotations:
-        pod.beta.kubernetes.io/init-containers: '[{
-            "name": "k8s-redis-ha-server",
-            "image": "tarosky/k8s-redis-ha:server-3.0.1",
-            "volumeMounts": [{"name": "opt", "mountPath": "/opt"}]
-          }]'
     spec:
       containers:
         - name: redis-server
@@ -42,6 +36,12 @@ spec:
           volumeMounts:
             - name: redis-server-volume
               mountPath: /data
+            - name: opt
+              mountPath: /opt
+      initContainers:
+        - name: redis-ha-server
+          image: tarosky/k8s-redis-ha:server-3.0.1
+          volumeMounts:
             - name: opt
               mountPath: /opt
       volumes:

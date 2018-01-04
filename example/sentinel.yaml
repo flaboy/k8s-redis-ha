@@ -10,12 +10,6 @@ spec:
     metadata:
       labels:
         app: redis-sentinel
-      annotations:
-        pod.beta.kubernetes.io/init-containers: '[{
-            "name": "k8s-redis-ha-sentinel",
-            "image": "tarosky/k8s-redis-ha:sentinel-3.0.1",
-            "volumeMounts": [{"name": "opt", "mountPath": "/opt"}]
-          }]'
     spec:
       containers:
         - name: redis-sentinel
@@ -49,6 +43,12 @@ spec:
               value: redis-sentinel
             - name: SENTINEL_PORT
               value: redis-sentinel
+          volumeMounts:
+            - name: opt
+              mountPath: /opt
+      initContainers:
+        - name: redis-ha-server
+          image: tarosky/k8s-redis-ha:sentinel-3.0.1
           volumeMounts:
             - name: opt
               mountPath: /opt
